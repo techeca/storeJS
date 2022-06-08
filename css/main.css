@@ -1,0 +1,47 @@
+.miCard {
+  min-width: 25%;
+  padding: 0px;
+  margin: 10px;
+}
+
+.imagenProducto {
+  margin-top: 20px;
+  height: 25vh;
+  object-fit: contain;
+}
+
+.btnCarShop {
+  margin-left: 10px;
+}
+
+.miniCardCarrito {
+  left: -240px;
+  top: 40px;
+  border: 1px solid #d3d3d3;
+  min-width: 280px;
+  font-size: 12px;
+}
+
+.productosEnCarro {
+  margin-left: 20px;
+}
+
+.loading {
+  opacity: 0.3;
+}
+
+.myContent {
+  border: 0px;
+}
+
+#hideAll
+ {
+   position: fixed;
+   left: 0px;
+   right: 0px;
+   top: 0px;
+   bottom: 0px;
+   background-color: white;
+   z-index: 99; /* Higher than anything else in the document */
+
+ }
