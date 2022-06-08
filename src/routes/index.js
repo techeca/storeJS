@@ -3,20 +3,6 @@ const pool = config.pool;
 const { Router } = require('express');
 const router = Router();
 
-//Test
-{/*router.get('/', (req, res) => {
-    //pool.getConnection();
-    pool.query('SELECT * FROM category', (err, rows, fields) => {
-     if(err) throw err;
-      console.log('The solution is: ', rows);
-    });
-    pool.releaseConnection(pool);
-    res.json(
-      {
-        'Title': 'Hola desde rutas con nodemon'
-      }
-    )
-});*/}
 //Obtiene todas la categorias
 router.get('/categorias', (req, res) => {
       pool.query('SELECT * FROM category', (err, rows, fields) => {
