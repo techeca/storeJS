@@ -4,7 +4,7 @@ function firstLoad(){
     //const element =  document.getElementById('productosCont');
     //element.replaceChildren();
     //element.appendChild(loading())
-    //document.getElementById("hideAll").style.display = "none" //para ver contenido sin conectarse a api
+    document.getElementById("hideAll").style.display = "none" //para ver contenido sin conectarse a api
     loadNav();
     const miCarrito = JSON.parse(localStorage.getItem('miCarrito'));
     //Si tenemos productos cargados anteriormente los cargamos
