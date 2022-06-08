@@ -72,3 +72,9 @@ Productos por categorio.
 Si no entrega un numero(int) recibira el error.
 
 >  "ID  incorrecta"
+
+front
+https://frontend-pb6g.onrender.com/
+
+api
+https://simple-store.onrender.com/
