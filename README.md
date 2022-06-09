@@ -1,5 +1,7 @@
 # storeJS
-Frontend y Backend con consumo de API.
+Frontend y Backend simple con consumo de API.
+[FRONTEND]([https://pages.github.com/](https://github.com/techeca/storeJS/tree/Frontend))
+[API]([https://pages.github.com/](https://github.com/techeca/storeJS/tree/API))
 
 ## Frontend
 Landing page realizada con JavaScript, los único externo que utiliza es Bootstrap y FontAwesome para el diseño.
@@ -7,7 +9,7 @@ Landing page realizada con JavaScript, los único externo que utiliza es Bootstr
 ## Backend
 API realizada con Express.
 
-En `/config/db.js` se encuentran los datos necesarios para establecer la pool de conexiones a la base de datos y no perderla.
+En `/config/db.js` se encuentran los datos necesarios para establecer conexiones a la base de datos y no perderla.
 
 ```bash
 const config = {
@@ -20,6 +22,8 @@ const config = {
   queueLimit: 0
 };
 ```
+Para mantener la conexión abierta:
+> waitForConnections: true,
 
 ### Endpoints
 
@@ -69,7 +73,9 @@ Productos por categorio.
       "category": 7
     }
 ```
+## Demo
 
+Fue utilizado render.com para alojar Frontend y API. 
 
 ### Front
 https://frontend-pb6g.onrender.com/
