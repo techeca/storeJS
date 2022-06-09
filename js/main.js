@@ -1,14 +1,14 @@
 //PRIMERA CARGA DE WEB
 //Inicia la carga de datos para nav y carrito
 function firstLoad(){
-    document.getElementById("hideAll").style.display = "none" //para ver contenido sin conectarse a api
+    //document.getElementById("hideAll").style.display = "none" //para ver contenido sin conectarse a api
     loadNav();
     const miCarrito = JSON.parse(localStorage.getItem('miCarrito'));
     //Si tenemos productos cargados anteriormente los cargamos
     if(miCarrito){updateMiniCardCarrito()}
 }
 
-//NAV y CONTENIDO
+//Nav y Contenido
 //Carga categorias a NAV
 function loadNav(){
   //prod https://simple-store.onrender.com/
@@ -40,6 +40,51 @@ function loadNav(){
     }
   });
 }
+//Cambia el contenido con los productos encontrados
+function handleBuscar(){
+  const inputBusqueda = document.getElementById('inputBusqueda');
+  const name = inputBusqueda.value;
+  const noConnResul = document.createElement('div');
+  //Validamos que hay texto
+  if(name.length > 0){
+    const element =  document.getElementById('productosCont');
+    //Limpia nodos en caso de tener contenido
+    element.replaceChildren();
+    element.appendChild(loading());
+    //Contenedor para productos
+    let documentFragment = document.createDocumentFragment();
+    //Solicitud de productos según nombre ingresado en input (LIKE)
+    fetch(`http://localhost:3000/productos/${name}`)
+      .then(response => response.json())
+      .then(json => {
+        if(json.rows.length > 0){
+          const productos = json.rows;
+          for (var i = 0; i < productos.length; i++) {
+            const newCard = productCard(productos[i]);
+            documentFragment.appendChild(newCard);
+          }
+        }else {
+          noConnResul.textContent = 'No tenemos ese producto  :(';
+          documentFragment.appendChild(noConnResul);
+        }
+
+      }).catch((e) => {
+        const noConnResul = document.createElement('div');
+        if(e.message === 'Failed to fetch'){
+          noConnResul.textContent = 'No hay conexion con la API Sorry';
+        }else {
+          noConnResul.textContent = 'Eso es una palabra?';
+        }
+        documentFragment.appendChild(noConnResul);
+        //console.log(e);
+      }).finally(() => {
+        element.replaceChildren();
+        element.appendChild(documentFragment)
+      });
+  }else {
+    showNotificacion('Debe ingresar un texto para poder buscar', 'warning')
+  }
+}
 //Cambia el contenido de productosCont (lista de productos)
 function handleContent (id, name){
   //Recibe id de categoria y nombre
@@ -68,49 +113,8 @@ function handleContent (id, name){
     element.appendChild(documentFragment)
     });
 }
-//Cambia el contenido con los productos encontrados
-function handleBuscar(){
-  const inputBusqueda = document.getElementById('inputBusqueda');
-  const name = inputBusqueda.value;
-  //Validamos que hay texto
-  if(name.length > 0){
-    const element =  document.getElementById('productosCont');
-    //Limpia nodos en caso de tener contenido
-    element.replaceChildren();
-    element.appendChild(loading());
-    //Contenedor para productos
-    let documentFragment = document.createDocumentFragment();
-    //Solicitud de productos según nombre ingresado en input (LIKE)
-    fetch(`http://localhost:3000/productos/${name}`)
-      .then(response => response.json())
-      .then(json => {
-        //console.log(json)
-        const productos = json.rows;
-        for (var i = 0; i < productos.length; i++) {
-          const newCard = productCard(productos[i]);
-          documentFragment.appendChild(newCard);
-        }
 
-      }).catch((e) => {
-        const noConn = document.createElement('div');
-        if(e.message === 'Failed to fetch'){
-          noConn.textContent = 'No hay conexion con la API Sorry';
-          documentFragment.appendChild(noConn);
-        }else {
-          console.log('otro error: '+e)
-        }
-        //console.log(e);
-      }).finally(() => {
-        element.replaceChildren();
-        element.appendChild(documentFragment)
-      });
-  }else {
-    showNotificacion('Debe ingresar un texto para poder buscar', 'warning')
-  }
-}
-
-
-//CONTROLES DE CARRITO
+//Controles de carrito
 //Actualiza elemento en carrito de compra
 function updateMiniCardCarrito() {
    let documentFragment = document.createDocumentFragment();
@@ -174,10 +178,11 @@ function agregarProductoCarrito(name, price){
 }
 //descontar producto de carrito
 function quitarProductoCarrito(name, price){
-  //Para descontar hay que verificar si el producto ya está agregado por el usuario
+  //Esta función es una copia de agregarProductoCarrito solo que con menos validaciones
   //Buscamos en localStorage, deberia tener proudctos, la funcion de quitar se genera junto con el producto cada vez que el usuario agrega uno nuevo
   const miCarrito = localStorage.getItem('miCarrito') ? JSON.parse(localStorage.getItem('miCarrito')) : [];
-  //Filtramos por el producto que quiere descontar
+  //Filtramos por el producto que quiere descontar //aqui creo que no es necesario porque ya sabemos que el producto si está en el carrito
+                                                    //por lo que no es necesario validar que productoEnCarrito ya que siempre es > 0
   const productoEnCarrito = miCarrito.filter((producto) => producto.nombre === name)
    //Hay productos guardados en localStorage
       if(productoEnCarrito.length > 0){
@@ -279,26 +284,31 @@ function productCarrito(proData){
   return a;
 }
 
+//Otros
 //Panel de notificaciones
 function showNotificacion(msg, tipo){
+  //Notificacion simple, no hacen stack (una notificacion sobre otra)
+  //Buscamos el div definido para notificaciones
   const myNotificaciones = document.getElementById('myNotificaciones');
   const documentFragment = document.createDocumentFragment();
   const alert = document.createElement('div');
+  //Clases para notificacion, Bootstrap solo para diseño
   alert.classList.add('alert', `alert-${tipo}`);
   alert.textContent = `${msg}`
-
-
+  //Modificamos el estado actual de la notificacion
   documentFragment.appendChild(alert);
   myNotificaciones.replaceChildren();
   myNotificaciones.appendChild(documentFragment);
   myNotificaciones.className = 'show';
+  //timeout para volver a esconder
   setTimeout(() => {myNotificaciones.className = myNotificaciones.className.replace('show', '');}, 3000);
 }
-
 //loading
 function loading(){
+  //Retorna icono de carga, handleContent se encarga de llamarlo (o cuando sea necesario)
   let documentFragment = document.createDocumentFragment();
   let loadIcon = document.createElement('i');
+  //Clases de FontAwesome para hacer girar y aumentar tamaño
   loadIcon.classList.add('fa-solid', 'fa-spinner', 'fa-spin-pulse', 'fa-4x', 'loading')
   documentFragment.appendChild(loadIcon);
   return documentFragment;
