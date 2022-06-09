@@ -1,7 +1,8 @@
 # storeJS
-Frontend y Backend simple con consumo de API.
-[FRONTEND]([https://pages.github.com/](https://github.com/techeca/storeJS/tree/Frontend))
-[API]([https://pages.github.com/](https://github.com/techeca/storeJS/tree/API))
+Frontend y Backend simple con consumo de API.\
+Los proyectos estan separados por branch.
+[FRONTEND](https://github.com/techeca/storeJS/tree/Frontend)\
+[API](https://github.com/techeca/storeJS/tree/API)
 
 ## Frontend
 Landing page realizada con JavaScript, los único externo que utiliza es Bootstrap y FontAwesome para el diseño.
