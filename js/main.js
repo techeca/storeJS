@@ -14,8 +14,9 @@ function firstLoad(){
 //CONTROLES DE CONTENIDO
 //Carga categorias a NAV
 function loadNav(){
+  //prod https://simple-store.onrender.com/categorias
   //Solicitud de categorias // se ejecuta en onload
-  fetch('https://simple-store.onrender.com/categorias')
+  fetch('http://localhost:3000/categorias')
     .then(response => response.json())
     .then(json => {
       //Busca el div de navegacion para almacenar las categorias
@@ -46,7 +47,7 @@ function handleContent (id, name){
   //Contenedor para productos
   let documentFragment = document.createDocumentFragment();
   //Solicitud de productos según categoria seleccionada
-  fetch(`https://simple-store.onrender.com/productosByCategoria/${id}`)
+  fetch(`http://localhost:3000/productosByCategoria/${id}`)
     .then(response => response.json())
     .then(json => {
       //Agregamos elementos a contenedor
@@ -75,7 +76,7 @@ function handleBuscar(){
   //Contenedor para productos
   let documentFragment = document.createDocumentFragment();
   //Solicitud de productos según nombre ingresado en input (LIKE)
-  fetch(`https://simple-store.onrender.com/productos/${name}`)
+  fetch(`http://localhost:3000/productos/${name}`)
     .then(response => response.json())
     .then(json => {
       console.log(json)
@@ -154,7 +155,7 @@ function agregarProductoCarrito(name, price){
   updateMiniCardCarrito()
 }
 
-//ESQUELETO PARA DE COMPONENTES
+//Funciones que returnar componentes
 //Componente boton para NAV (Categorias)
 function btnNav(catData){
   //Recibe informacion de la categoria id y name
@@ -211,7 +212,12 @@ function productCard(proData){
   card.appendChild(botonComprar);
   return card;
 }
-//Componente de loading
+
+
+
+
+
+//loading
 function loading(){
   let documentFragment = document.createDocumentFragment();
   let loadIcon = document.createElement('i');
