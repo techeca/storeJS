@@ -103,17 +103,7 @@ function updateMiniCardCarrito() {
    //En localStorage están miCarrito estan guardados los producto que el usuario quiere
    const miCarrito = JSON.parse(localStorage.getItem('miCarrito'));
    for (var i = 0; i < miCarrito.length; i++) {
-        const a =  document.createElement('a');
-        const span =  document.createElement('span');
-        //Agregamos clases de Bootstrap y productosEnCarro para la cantidad cantidad y precio
-        a.classList.add('dropdown-item');
-        span.classList.add('productosEnCarro');
-        //Agregamos contenidos
-        a.textContent = `${miCarrito[i].nombre}`
-        span.textContent = `${miCarrito[i].cantidad} x ${addDots(miCarrito[i].precio*miCarrito[i].cantidad)}`  //addDots
-        //Unimos elementos
-        a.appendChild(span)
-        documentFragment.appendChild(a)
+        documentFragment.appendChild(productCarrito(miCarrito[i]));
    }
    //Insertamos en nuevo carrito con datos actualizados
    element.appendChild(documentFragment)
@@ -154,9 +144,50 @@ function agregarProductoCarrito(name, price){
   //Actualizamos carrito de compras
   updateMiniCardCarrito()
 }
+//descontar producto de carrito
+function quitarProductoCarrito(name, price){
+  console.log(name)
+  console.log(price)
+  //Para agregar hay que verificar si el producto ya está agregado por el usuario
+  //Buscamos en localStorage, si hay productos lo guardamos si no generamos un array en blanco
+  const miCarrito = localStorage.getItem('miCarrito') ? JSON.parse(localStorage.getItem('miCarrito')) : [];
+  //Filtramos por el producto que está agregando el usuario
+  const productoEnCarrito = miCarrito.filter((producto) => producto.nombre === name)
+  //Generamos nuevo producto con datos iniciales
+  //const nuevoItem = {nombre:name, precio:price, cantidad:1}
+  if(miCarrito.length > 0){
+   //Hay productos guardados en localStorage
+      if(productoEnCarrito.length > 0){
+        //Hay productos iguales en carrito al filtrar
+        //Modificamos la cantidad del producto que es igual //deberia ser por id
+        for (var i = 0; i < miCarrito.length; i++) {
+            if(miCarrito[i].nombre === name){
+              let newCant = miCarrito[i].cantidad - 1;
+              miCarrito[i].cantidad = newCant;
+            }
+        }
+      }else {
+        //No hay producto iguales
+        //miCarrito.push(nuevoItem)
+        localStorage.setItem('miCarrito', JSON.stringify(miCarrito))
+      }
+    //Actualizamos carrito localStorage con producto nuevo o modificado
+    const newCarrito = miCarrito.filter((p) => p.cantidad > 0);
+    localStorage.setItem('miCarrito', JSON.stringify(newCarrito))
+  }//else {
+    //No hay ningun producto
+    //miCarrito.push(nuevoItem)
+    //Actualizamos carrito localStorage
+    //localStorage.setItem('miCarrito', JSON.stringify(miCarrito))
+  //}
+  //Actualizamos carrito de compras
+  updateMiniCardCarrito()
+}
 
-//Funciones que returnar componentes
-//Componente boton para NAV (Categorias)
+
+
+//Funciones que retornan un fragmento html repetitivo
+//Boton para NAV (Categorias)
 function btnNav(catData){
   //Recibe informacion de la categoria id y name
   const tempData = catData;
@@ -175,7 +206,7 @@ function btnNav(catData){
 
   return tag;
 }
-//Componente Tarjeta de Producto
+//Tarjeta de Producto
 function productCard(proData){
   //Recibe Id de Categoria
   const tempData = proData;
@@ -212,7 +243,28 @@ function productCard(proData){
   card.appendChild(botonComprar);
   return card;
 }
+//Producto en Carrito
+function productCarrito(proData){
+  const newProduct = proData;
+  const a =  document.createElement('a');
+  const nombProd = document.createElement('span')
+  const span =  document.createElement('span');
+  const btnMenos = document.createElement('button');
+  //Agregamos clases de Bootstrap y productosEnCarro para la cantidad cantidad y precio
+  a.classList.add('dropdown-item');
+  nombProd.classList.add('nombreProdCarrito');
+  span.classList.add('precioCantCarrito');  // productosEnCarro
+  btnMenos.classList.add('fa-minus', 'fa-solid', 'btn', 'btn-danger', 'btn-sm', 'btnMenos');
+  btnMenos.onclick = () => quitarProductoCarrito(`${newProduct.nombre}`, newProduct.precio);
+  //Agregamos contenidos
+  a.textContent = `${newProduct.nombre}`;
+  span.textContent = `${newProduct.cantidad} x ${addDots(newProduct.precio*newProduct.cantidad)}`; //addDots
+  //Unimos elementos
+  a.appendChild(span);
+  a.appendChild(btnMenos);
 
+  return a;
+}
 
 
 

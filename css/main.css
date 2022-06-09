@@ -15,15 +15,24 @@
 }
 
 .miniCardCarrito {
-  left: -240px;
+  left: -280px;
   top: 40px;
   border: 1px solid #d3d3d3;
   min-width: 280px;
   font-size: 12px;
 }
 
-.productosEnCarro {
+.nombreProdCarrito {
+  width: 50%;
+}
+
+.precioCantCarrito {
+  width: 30%;
   margin-left: 20px;
+}
+
+.productosEnCarro {
+  margin-left: 15px;
 }
 
 .loading {
@@ -32,6 +41,15 @@
 
 .myContent {
   border: 0px;
+}
+
+.dropdown-item {
+  display: flex;
+}
+
+.btnMenos {
+  width: 20%;
+  margin-left: 5px;
 }
 
 #inputBusqueda {
