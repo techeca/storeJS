@@ -7,14 +7,14 @@ Landing page realizada con JavaScript, los único externo que utiliza es Bootstr
 ## Backend
 API realizada con Express.
 
-En `/config/db.js` se encuentran los datos necesarios para establecer la pool de conexiones a la base de datos.
+En `/config/db.js` se encuentran los datos necesarios para establecer la pool de conexiones a la base de datos y no perderla.
 
 ```bash
 const config = {
-  user: 'bsale_test',
-  password: 'bsale_test',
-  database: 'bsale_test',
-  host: 'mdb-test.c6vunyturrl6.us-west-1.rds.amazonaws.com',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DATABASE_NAME,
+  host: process.env.HOST,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
@@ -69,12 +69,10 @@ Productos por categorio.
       "category": 7
     }
 ```
-Si no entrega un numero(int) recibira el error.
 
->  "ID  incorrecta"
 
-front
+### Front
 https://frontend-pb6g.onrender.com/
 
-api
+### API
 https://simple-store.onrender.com/
