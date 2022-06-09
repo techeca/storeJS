@@ -1,16 +1,16 @@
+require('dotenv').config();
 const mysql = require('mysql2')
 
 //Datos de conexión para pool
 const config = {
-  user: 'bsale_test',
-  password: 'bsale_test',
-  database: 'bsale_test',
-  host: 'mdb-test.c6vunyturrl6.us-west-1.rds.amazonaws.com',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DATABASE_NAME,
+  host: process.env.HOST,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 };
-
 //Check de conexión //BORRAR
  const pool = mysql.createConnection(config);
  pool.connect((err) => {

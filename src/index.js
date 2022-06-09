@@ -2,9 +2,6 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors');
-
-
-
 //development config
 app.set('port', process.env.PORT || 3000);
 app.set('json spaces', 2);
@@ -15,16 +12,6 @@ app.use(morgan('dev')); //ejecuta morgan solo en development
 //app.use(express.json());  //Necesario para POST/PUT
 app.use(cors());
 app.use(require('./routes/index')); //Rutas de request
-
-//Error Handler
-app.use(function errorHandler(err, req, res, next) {
-  //console.log(err)
-  console.log(res)
-  res.status(500).json(`${err}`);
-  //res.status(500);
-  //res.render('error', { error: err });
-  return
-});
 
 //Inicia servidor
 app.listen(app.get('port'), () => {
