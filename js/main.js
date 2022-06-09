@@ -105,8 +105,18 @@ function updateMiniCardCarrito() {
    for (var i = 0; i < miCarrito.length; i++) {
         documentFragment.appendChild(productCarrito(miCarrito[i]));
    }
+   if(miCarrito.length > 0){
+     element.appendChild(documentFragment)
+   }else {
+     console.log('no hay productos carrito')
+     const noProductos = document.createElement('i');
+     noProductos.classList.add('dropdown-item');
+     noProductos.textContent = 'Carrito Vacío';
+     documentFragment.appendChild(noProductos);
+     element.appendChild(element.appendChild(documentFragment))
+   }
    //Insertamos en nuevo carrito con datos actualizados
-   element.appendChild(documentFragment)
+
 }
 //Agrega producto a carrito de compras recibe nombre y descripcion
 function agregarProductoCarrito(name, price){
@@ -146,16 +156,11 @@ function agregarProductoCarrito(name, price){
 }
 //descontar producto de carrito
 function quitarProductoCarrito(name, price){
-  console.log(name)
-  console.log(price)
-  //Para agregar hay que verificar si el producto ya está agregado por el usuario
-  //Buscamos en localStorage, si hay productos lo guardamos si no generamos un array en blanco
+  //Para descontar hay que verificar si el producto ya está agregado por el usuario
+  //Buscamos en localStorage, deberia tener proudctos, la funcion de quitar se genera junto con el producto cada vez que el usuario agrega uno nuevo
   const miCarrito = localStorage.getItem('miCarrito') ? JSON.parse(localStorage.getItem('miCarrito')) : [];
-  //Filtramos por el producto que está agregando el usuario
+  //Filtramos por el producto que quiere descontar
   const productoEnCarrito = miCarrito.filter((producto) => producto.nombre === name)
-  //Generamos nuevo producto con datos iniciales
-  //const nuevoItem = {nombre:name, precio:price, cantidad:1}
-  if(miCarrito.length > 0){
    //Hay productos guardados en localStorage
       if(productoEnCarrito.length > 0){
         //Hay productos iguales en carrito al filtrar
@@ -166,20 +171,11 @@ function quitarProductoCarrito(name, price){
               miCarrito[i].cantidad = newCant;
             }
         }
-      }else {
-        //No hay producto iguales
-        //miCarrito.push(nuevoItem)
-        localStorage.setItem('miCarrito', JSON.stringify(miCarrito))
       }
-    //Actualizamos carrito localStorage con producto nuevo o modificado
+    //Actualizamos carrito localStorage filtramos los productos que quedaron en 0
     const newCarrito = miCarrito.filter((p) => p.cantidad > 0);
     localStorage.setItem('miCarrito', JSON.stringify(newCarrito))
-  }//else {
-    //No hay ningun producto
-    //miCarrito.push(nuevoItem)
-    //Actualizamos carrito localStorage
-    //localStorage.setItem('miCarrito', JSON.stringify(miCarrito))
-  //}
+
   //Actualizamos carrito de compras
   updateMiniCardCarrito()
 }
@@ -206,7 +202,7 @@ function btnNav(catData){
 
   return tag;
 }
-//Tarjeta de Producto
+//Tarjeta de Producto nombre, imagen, precio, btn comprar
 function productCard(proData){
   //Recibe Id de Categoria
   const tempData = proData;
@@ -243,7 +239,7 @@ function productCard(proData){
   card.appendChild(botonComprar);
   return card;
 }
-//Producto en Carrito
+//Producto en Carrito nombre, cantidad, total de ese producto, btn para descontar
 function productCarrito(proData){
   const newProduct = proData;
   const a =  document.createElement('a');
@@ -257,9 +253,10 @@ function productCarrito(proData){
   btnMenos.classList.add('fa-minus', 'fa-solid', 'btn', 'btn-danger', 'btn-sm', 'btnMenos');
   btnMenos.onclick = () => quitarProductoCarrito(`${newProduct.nombre}`, newProduct.precio);
   //Agregamos contenidos
-  a.textContent = `${newProduct.nombre}`;
+  nombProd.textContent = `${newProduct.nombre}`;
   span.textContent = `${newProduct.cantidad} x ${addDots(newProduct.precio*newProduct.cantidad)}`; //addDots
   //Unimos elementos
+  a.appendChild(nombProd);
   a.appendChild(span);
   a.appendChild(btnMenos);
 
