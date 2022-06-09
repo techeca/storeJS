@@ -1,9 +1,6 @@
 //PRIMERA CARGA DE WEB
 //Inicia la carga de datos para nav y carrito
 function firstLoad(){
-    //const element =  document.getElementById('productosCont');
-    //element.replaceChildren();
-    //element.appendChild(loading())
     document.getElementById("hideAll").style.display = "none" //para ver contenido sin conectarse a api
     loadNav();
     const miCarrito = JSON.parse(localStorage.getItem('miCarrito'));
@@ -11,10 +8,10 @@ function firstLoad(){
     if(miCarrito){updateMiniCardCarrito()}
 }
 
-//CONTROLES DE CONTENIDO
+//NAV y CONTENIDO
 //Carga categorias a NAV
 function loadNav(){
-  //prod https://simple-store.onrender.com/categorias
+  //prod https://simple-store.onrender.com/
   //Solicitud de categorias // se ejecuta en onload
   fetch('http://localhost:3000/categorias')
     .then(response => response.json())
@@ -27,14 +24,21 @@ function loadNav(){
             const newBtn = btnNav(json.rows[i])
             documentFragment.appendChild(newBtn);
       }
-      //Modificamos solo 1 vez DOM
       //Se inserta contenedor en div dynamicNav
       element.appendChild(documentFragment);
-    }).then(() =>
-    //Despues de la carga de las categorias mostramos el contenido
-    document.getElementById("hideAll").style.display = "none"
-  ).catch((e) => console.log(e));
-    //hideAll es un div que oculta el contenido de la página
+      document.getElementById("hideAll").style.display = "none";
+      //hideAll es un div que oculta el contenido de la página
+    }).catch((e) => {
+    if(e.message === 'Failed to fetch'){
+      const displayError = document.getElementById('hideAll');
+      const documentFragment = document.createDocumentFragment();
+      const noConn = document.createElement('h1');
+      noConn.textContent = 'No hay conexion con la API, Sorry :(';
+      documentFragment.appendChild(noConn);
+      //displayError.replaceChildren();
+      displayError.appendChild(documentFragment);
+    }
+  });
 }
 //Cambia el contenido de productosCont (lista de productos)
 function handleContent (id, name){
@@ -68,28 +72,41 @@ function handleContent (id, name){
 function handleBuscar(){
   const inputBusqueda = document.getElementById('inputBusqueda');
   const name = inputBusqueda.value;
-  //console.log(name)
-  const element =  document.getElementById('productosCont');
-  //Limpia nodos en caso de tener contenido
-  element.replaceChildren();
-  element.appendChild(loading());
-  //Contenedor para productos
-  let documentFragment = document.createDocumentFragment();
-  //Solicitud de productos según nombre ingresado en input (LIKE)
-  fetch(`http://localhost:3000/productos/${name}`)
-    .then(response => response.json())
-    .then(json => {
-      console.log(json)
-      const productos = json.rows;
-      for (var i = 0; i < productos.length; i++) {
-        const newCard = productCard(productos[i]);
-        documentFragment.appendChild(newCard);
-      }
+  //Validamos que hay texto
+  if(name.length > 0){
+    const element =  document.getElementById('productosCont');
+    //Limpia nodos en caso de tener contenido
+    element.replaceChildren();
+    element.appendChild(loading());
+    //Contenedor para productos
+    let documentFragment = document.createDocumentFragment();
+    //Solicitud de productos según nombre ingresado en input (LIKE)
+    fetch(`http://localhost:3000/productos/${name}`)
+      .then(response => response.json())
+      .then(json => {
+        //console.log(json)
+        const productos = json.rows;
+        for (var i = 0; i < productos.length; i++) {
+          const newCard = productCard(productos[i]);
+          documentFragment.appendChild(newCard);
+        }
 
-    }).then(() => {
-      element.replaceChildren();
-      element.appendChild(documentFragment)
-    });
+      }).catch((e) => {
+        const noConn = document.createElement('div');
+        if(e.message === 'Failed to fetch'){
+          noConn.textContent = 'No hay conexion con la API Sorry';
+          documentFragment.appendChild(noConn);
+        }else {
+          console.log('otro error: '+e)
+        }
+        //console.log(e);
+      }).finally(() => {
+        element.replaceChildren();
+        element.appendChild(documentFragment)
+      });
+  }else {
+    showNotificacion('Debe ingresar un texto para poder buscar', 'warning')
+  }
 }
 
 
@@ -105,18 +122,18 @@ function updateMiniCardCarrito() {
    for (var i = 0; i < miCarrito.length; i++) {
         documentFragment.appendChild(productCarrito(miCarrito[i]));
    }
+   //Al actualizar puede quedar el carrito sin productos por lo que se debe confirmar
    if(miCarrito.length > 0){
+     //Si hay inserta el productos
      element.appendChild(documentFragment)
    }else {
-     console.log('no hay productos carrito')
+     //No hay producto asi que genera un <i> con con un mensaje
      const noProductos = document.createElement('i');
      noProductos.classList.add('dropdown-item');
      noProductos.textContent = 'Carrito Vacío';
      documentFragment.appendChild(noProductos);
      element.appendChild(element.appendChild(documentFragment))
    }
-   //Insertamos en nuevo carrito con datos actualizados
-
 }
 //Agrega producto a carrito de compras recibe nombre y descripcion
 function agregarProductoCarrito(name, price){
@@ -139,19 +156,20 @@ function agregarProductoCarrito(name, price){
             }
         }
       }else {
-        //No hay producto iguales
+        //No hay productos iguales
         miCarrito.push(nuevoItem)
         localStorage.setItem('miCarrito', JSON.stringify(miCarrito))
       }
     //Actualizamos carrito localStorage con producto nuevo o modificado
     localStorage.setItem('miCarrito', JSON.stringify(miCarrito))
   }else {
-    //No hay ningun producto
+    //No hay ningun producto igual
     miCarrito.push(nuevoItem)
     //Actualizamos carrito localStorage
     localStorage.setItem('miCarrito', JSON.stringify(miCarrito))
   }
   //Actualizamos carrito de compras
+  showNotificacion('Producto agregado al carrito!!', 'success')
   updateMiniCardCarrito()
 }
 //descontar producto de carrito
@@ -175,12 +193,10 @@ function quitarProductoCarrito(name, price){
     //Actualizamos carrito localStorage filtramos los productos que quedaron en 0
     const newCarrito = miCarrito.filter((p) => p.cantidad > 0);
     localStorage.setItem('miCarrito', JSON.stringify(newCarrito))
-
   //Actualizamos carrito de compras
+  showNotificacion('Producto descontado', 'danger')
   updateMiniCardCarrito()
 }
-
-
 
 //Funciones que retornan un fragmento html repetitivo
 //Boton para NAV (Categorias)
@@ -263,8 +279,21 @@ function productCarrito(proData){
   return a;
 }
 
+//Panel de notificaciones
+function showNotificacion(msg, tipo){
+  const myNotificaciones = document.getElementById('myNotificaciones');
+  const documentFragment = document.createDocumentFragment();
+  const alert = document.createElement('div');
+  alert.classList.add('alert', `alert-${tipo}`);
+  alert.textContent = `${msg}`
 
 
+  documentFragment.appendChild(alert);
+  myNotificaciones.replaceChildren();
+  myNotificaciones.appendChild(documentFragment);
+  myNotificaciones.className = 'show';
+  setTimeout(() => {myNotificaciones.className = myNotificaciones.className.replace('show', '');}, 3000);
+}
 
 //loading
 function loading(){
@@ -276,7 +305,7 @@ function loading(){
 }
 
 //UTILS
-//Agrega punto cada 3 digitos ///parece que tambien se puede con expresiones regulares //probar
+//Agrega punto cada 3 digitos ///creo que tambien se puede con expresiones regulares //probar
 //https://stackoverflow.com/questions/8110313/add-points-after-every-3-digits-on-all-text-fields-with-js
 function addDots(nStr){
     nStr += '';
@@ -289,30 +318,3 @@ function addDots(nStr){
       }
       return x1 + x2;
   }
-
-//Carga nada sacar
-function testfunc(){
-  fetch('http://localhost:3000/')
-    .then(response => response.json())
-    .then(json => {
-      console.log(json)
-
-      //console.log(json.rows.length)
-      //const text = document.createTextNode("Tutorix is the best e-learning platform");
-      //tag.appendChild(a);
-      const element = document.getElementById('dynamicNav');
-      //element.appendChild(tag);
-      let documentFragment = document.createDocumentFragment();
-      for(var i = 0; i < json.rows.length; i++) {
-            console.log(json.rows[i])
-            let tag = document.createElement('li')
-            let a = document.createElement('a');
-            a.value = json.rows[i].name;
-            tag.appendChild(a);
-            documentFragment.appendChild(tag);
-      }
-      element.appendChild(documentFragment);
-
-    });
-
-}
