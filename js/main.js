@@ -1,7 +1,7 @@
 //PRIMERA CARGA DE WEB
 //Inicia la carga de datos para nav y carrito
 function firstLoad(){
-    //document.getElementById("hideAll").style.display = "none" //para ver contenido sin conectarse a api
+    document.getElementById("hideAll").style.display = "none" //para ver contenido sin conectarse a api
     loadNav();
     const miCarrito = JSON.parse(localStorage.getItem('miCarrito'));
     //Si tenemos productos cargados anteriormente los cargamos
@@ -11,16 +11,16 @@ function firstLoad(){
 //Nav y Contenido
 //Carga categorias a NAV
 function loadNav(){
-  //prod https://simple-store.onrender.com/
+  //prod http://localhost:3000/
   //Solicitud de categorias // se ejecuta en onload
-  fetch('https://simple-store.onrender.com/categorias')
+  fetch('http://localhost:3000/categorias')
     .then(response => response.json())
     .then(json => {
       //Busca el div de navegacion para almacenar las categorias
       const element = document.getElementById('dynamicNav');
       let documentFragment = document.createDocumentFragment();
       //Agrega categorias a contenedor
-      for(var i = 0; i < json.rows.length; i++) {
+      for(let i = 0; i < json.rows.length; i++) {
             const newBtn = btnNav(json.rows[i])
             documentFragment.appendChild(newBtn);
       }
@@ -55,12 +55,12 @@ function handleBuscar(){
     //Contenedor para productos
     let documentFragment = document.createDocumentFragment();
     //Solicitud de productos según nombre ingresado en input (LIKE)
-    fetch(`https://simple-store.onrender.com/productos/${name}`)
+    fetch(`http://localhost:3000/productos/${name}`)
       .then(response => response.json())
       .then(json => {
         if(json.rows.length > 0){
           const productos = json.rows;
-          for (var i = 0; i < productos.length; i++) {
+          for (let i = 0; i < productos.length; i++) {
             const newCard = productCard(productos[i]);
             documentFragment.appendChild(newCard);
           }
@@ -97,12 +97,12 @@ function handleContent (id, name){
   //Contenedor para productos
   let documentFragment = document.createDocumentFragment();
   //Solicitud de productos según categoria seleccionada
-  fetch(`https://simple-store.onrender.com/productosByCategoria/${id}`)
+  fetch(`http://localhost:3000/productosByCategoria/${id}`)
     .then(response => response.json())
     .then(json => {
       //Agregamos elementos a contenedor
       const productos = json.rows;
-      for (var i = 0; i < productos.length; i++) {
+      for (let i = 0; i < productos.length; i++) {
         const newCard = productCard(productos[i]);
         documentFragment.appendChild(newCard);
       }
@@ -122,20 +122,40 @@ function updateMiniCardCarrito() {
    const element =  document.getElementById('miniCardCarrito');
    //Limpiamos en caso de existir otros a la vista y generamos uno nuevo
    element.replaceChildren();
+   //titulo carrito, total, btnPagar
+   const tituloCarrito = document.createElement('h6');
+   tituloCarrito.classList.add('tituloCarrito');
+   tituloCarrito.textContent = 'Carrito de compras';
+   documentFragment.appendChild(tituloCarrito);
    //En localStorage están miCarrito estan guardados los producto que el usuario quiere
    const miCarrito = JSON.parse(localStorage.getItem('miCarrito'));
-   for (var i = 0; i < miCarrito.length; i++) {
+   for (let i = 0; i < miCarrito.length; i++) {
         documentFragment.appendChild(productCarrito(miCarrito[i]));
    }
    //Al actualizar puede quedar el carrito sin productos por lo que se debe confirmar
    if(miCarrito.length > 0){
-     //Si hay inserta el productos
-     element.appendChild(documentFragment)
+     //Si hay inserta el/los productos
+    //btnComprar, total
+    //console.log(miCarrito);
+    //console.log(miCarrito.map((p) => parseInt(p.precio)).reduce((a, b) => a + b));
+    const total = document.createElement('a');
+    total.textContent = `Total : $${addDots(miCarrito.map((p) => parseInt(p.precio)).reduce((a, b) => a + b))}`;
+    const btnComprar = document.createElement('button');
+    const divider = document.createElement('div');
+    //Clases de Bootstrap
+    btnComprar.classList.add('btn', 'btn-danger', 'btn-sm', 'btnComprar');
+    btnComprar.textContent = 'Pagar';
+    total.classList.add('totalCompras');
+    divider.classList.add('dropdown-divider');
+    documentFragment.appendChild(divider);
+    total.appendChild(btnComprar);
+    documentFragment.appendChild(total);
+    element.appendChild(documentFragment)
    }else {
      //No hay producto asi que genera un <i> con con un mensaje
      const noProductos = document.createElement('i');
      noProductos.classList.add('dropdown-item');
-     noProductos.textContent = 'Carrito Vacío';
+     noProductos.textContent = 'Vacío';
      documentFragment.appendChild(noProductos);
      element.appendChild(element.appendChild(documentFragment))
    }
@@ -154,7 +174,7 @@ function agregarProductoCarrito(name, price){
       if(productoEnCarrito.length > 0){
         //Hay productos iguales en carrito al filtrar
         //Modificamos la cantidad del producto que es igual //deberia ser por id
-        for (var i = 0; i < miCarrito.length; i++) {
+        for (let i = 0; i < miCarrito.length; i++) {
             if(miCarrito[i].nombre === name){
               let newCant = miCarrito[i].cantidad + 1;
               miCarrito[i].cantidad = newCant;
@@ -183,13 +203,13 @@ function quitarProductoCarrito(name, price){
   //Buscamos en localStorage, deberia tener proudctos, la funcion de quitar se genera junto con el producto cada vez que el usuario agrega uno nuevo
   const miCarrito = localStorage.getItem('miCarrito') ? JSON.parse(localStorage.getItem('miCarrito')) : [];
   //Filtramos por el producto que quiere descontar //aqui creo que no es necesario porque ya sabemos que el producto si está en el carrito
-                                                    //por lo que no es necesario validar que productoEnCarrito ya que siempre es > 0
+                                                    //por lo que no es necesario validar productoEnCarrito ya que siempre es > 0
   const productoEnCarrito = miCarrito.filter((producto) => producto.nombre === name)
    //Hay productos guardados en localStorage
       if(productoEnCarrito.length > 0){
         //Hay productos iguales en carrito al filtrar
         //Modificamos la cantidad del producto que es igual //deberia ser por id
-        for (var i = 0; i < miCarrito.length; i++) {
+        for (let i = 0; i < miCarrito.length; i++) {
             if(miCarrito[i].nombre === name){
               let newCant = miCarrito[i].cantidad - 1;
               miCarrito[i].cantidad = newCant;
@@ -244,8 +264,8 @@ function productCard(proData){
   card.classList.add('card', 'col-md-3','miCard');
   cardBody.classList.add('card-body');
   precioProducto.classList.add('card-text');
-  botonComprar.classList.add('btn', 'btn-primary')
-  //Si tiene imagen devuelve el link, si no utiliza la imagen de respaldo noImgUrl
+  botonComprar.classList.add('btn', 'btn-primary', 'btnAgregar')
+  //Si tiene imagen devuelve el link, si no hay imagen utiliza la imagen de respaldo 'noImgUrl'
   img.setAttribute('src' ,`${tempData.url_image ? tempData.url_image : noImgUrl}`);
   card.setAttribute('id', tempData.id);
   botonComprar.onclick = () => agregarProductoCarrito(`${tempData.name}`, `${tempData.price}`);
@@ -268,7 +288,7 @@ function productCarrito(proData){
   const nombProd = document.createElement('span')
   const span =  document.createElement('span');
   const btnMenos = document.createElement('button');
-  //Agregamos clases de Bootstrap y productosEnCarro para la cantidad cantidad y precio
+  //Agregamos clases de Bootstrap y productosEnCarro para la cantidad y precio
   a.classList.add('dropdown-item');
   nombProd.classList.add('nombreProdCarrito');
   span.classList.add('precioCantCarrito');  // productosEnCarro
@@ -323,7 +343,7 @@ function addDots(nStr){
     x = nStr.split('.');
     x1 = x[0];
     x2 = x.length > 1 ? '.' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
+    let rgx = /(\d+)(\d{3})/;
       while (rgx.test(x1)) {    ///WHAT???
           x1 = x1.replace(rgx, '$1' + '.' + '$2'); // changed comma to dot here
       }

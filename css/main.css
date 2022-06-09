@@ -15,10 +15,10 @@
 }
 
 .miniCardCarrito {
-  left: -280px;
+  left: -290px;
   top: 40px;
   border: 1px solid #d3d3d3;
-  min-width: 280px;
+  min-width: 320px;
   font-size: 12px;
 }
 
@@ -54,18 +54,40 @@
   margin-left: 5px;
 }
 
+.btnAgregar {
+  border-radius: 0px 0px 3px 3px
+}
+
 #inputBusqueda {
   width: auto;
+}
+
+.tituloCarrito {
+  margin-left: 10px;
+}
+
+.totalCompras {
+  width: 100%;
+  margin: 10px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6%;
+}
+
+.btnComprar {
+  margin-left: 10px;
+  margin-right: 6%;
+  margin-top: -2%;
 }
 
 /* The snackbar - position it at the bottom and in the middle of the screen */
 #myNotificaciones {
   visibility: hidden; /* Hidden by default. Visible on click */
   min-width: 250px; /* Set a default minimum width */
-  margin-left: -125px; /* Divide value of min-width by 2 */
+  margin-left: -150px; /* Divide value of min-width by 2 */
   text-align: center; /* Centered text */
   border-radius: 2px; /* Rounded borders */
-  padding: 16px; /* Padding */
+  padding: 8px; /* Padding */
   position: fixed; /* Sit on top of the screen */
   z-index: 1; /* Add a z-index if needed */
   left: 50%; /* Center the snackbar */
