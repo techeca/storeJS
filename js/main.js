@@ -87,32 +87,44 @@ function handleBuscar(){
   }
 }
 //Cambia el contenido de productosCont (lista de productos)
-function handleContent (id, name){
+function handleContent (id, name, page){
   //Recibe id de categoria y nombre
   //Obtiene el estado actual del div que muestra los productos
   const element =  document.getElementById('productosCont');
+  const divPagination = document.getElementById('pagination');
   //Limpia nodos en caso de tener contenido
   element.replaceChildren();
+  divPagination.replaceChildren();
   element.appendChild(loading());
   //Contenedor para productos
-  let documentFragment = document.createDocumentFragment();
+  const documentFragment = document.createDocumentFragment();
+  const paginationFragment = document.createDocumentFragment();
+  const toPage = page ? page : 1
+
+    //console.log('toPage '+toPage)
   //Solicitud de productos según categoria seleccionada
-  fetch(`http://localhost:3000/productosByCategoria/${id}`)
+  fetch(`http://localhost:3000/productosByCategoria?id=${id}&page=${toPage}`)
     .then(response => response.json())
     .then(json => {
       //Agregamos elementos a contenedor
-      const productos = json.rows;
+      const productos = json.productos;
       for (let i = 0; i < productos.length; i++) {
         const newCard = productCard(productos[i]);
         documentFragment.appendChild(newCard);
+      }
+      //Se inserta paginacion, Math.ceil para redondear al numero superior total productos / 6
+      for (var i = 0; i < Math.ceil(json.total[0].totalProductos/6); i++) {
+        //console.log(i)
+        paginationFragment.appendChild(btnPagination(id, name, i));
       }
 
     }).then(() => {
     //Modificamos solo 1 vez DOM
     //Inserta contenedor en div productosCont
     element.replaceChildren();
-    element.appendChild(documentFragment)
-    });
+    element.appendChild(documentFragment);
+    divPagination.appendChild(paginationFragment);
+  }).catch((err) => console.log(err));
 }
 
 //Controles de carrito
@@ -304,11 +316,24 @@ function productCarrito(proData){
 
   return a;
 }
+//Boton de pagination
+function btnPagination(id, name, page){
+  //const total = Math.ceil(page/6);
+    let li = document.createElement('li');
+    let a = document.createElement('a');
+    li.classList.add('padge-item');
+    a.classList.add('page-link');
+    a.textContent = `${page+1}`;
+    a.onclick = () => handleContent(id, name, page+1);
+    li.appendChild(a);
+  return li;
+}
 
 //Otros
 //Panel de notificaciones
 function showNotificacion(msg, tipo){
   //Notificacion simple, no hacen stack (una notificacion sobre otra)
+  //Si se hace cualquier accion que llame notificacion mientras ya se esté ejecutando una, la última no se verá
   //Buscamos el div definido para notificaciones
   const myNotificaciones = document.getElementById('myNotificaciones');
   const documentFragment = document.createDocumentFragment();
@@ -324,6 +349,7 @@ function showNotificacion(msg, tipo){
   //timeout para volver a esconder
   setTimeout(() => {myNotificaciones.className = myNotificaciones.className.replace('show', '');}, 3000);
 }
+//Resumen de compra??
 //loading
 function loading(){
   //Retorna icono de carga, handleContent se encarga de llamarlo (o cuando sea necesario)
@@ -336,6 +362,10 @@ function loading(){
 }
 
 //UTILS
+function paginate(array, pageSize, pageNumber) {
+    // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+    return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
+  }
 //Agrega punto cada 3 digitos ///creo que tambien se puede con expresiones regulares //probar
 //https://stackoverflow.com/questions/8110313/add-points-after-every-3-digits-on-all-text-fields-with-js
 function addDots(nStr){

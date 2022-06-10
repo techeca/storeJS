@@ -80,6 +80,10 @@
   margin-top: -2%;
 }
 
+.row {
+    margin-right: 0px;
+}
+
 /* The snackbar - position it at the bottom and in the middle of the screen */
 #myNotificaciones {
   visibility: hidden; /* Hidden by default. Visible on click */
