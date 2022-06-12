@@ -1,7 +1,10 @@
 //PRIMERA CARGA DE WEB
 //Inicia la carga de datos para nav y carrito
 function firstLoad(){
-    //document.getElementById("hideAll").style.display = "none" //para ver contenido sin conectarse a api
+  //const prodtest = new Producto(1, 'nametest', 'precioprotest', 'http:vlavlavbla')
+  //const tsrtest = new TarjetaProducto();
+    //import {TarjetaProducto} from './TarjetaProducto.js';
+    document.getElementById("hideAll").style.display = "none" //para ver contenido sin conectarse a api
     loadNav();
     const miCarrito = JSON.parse(localStorage.getItem('miCarrito'));
     //Si tenemos productos cargados anteriormente los cargamos
@@ -11,19 +14,18 @@ function firstLoad(){
 //Nav y Contenido
 //Carga categorias a NAV
 function loadNav(){
+  //prod https://simple-store.onrender.com/
   //Solicitud de categorias // se ejecuta en onload
-  fetch('http://localhost:3000/categorias')
+  fetch('https://simple-store.onrender.com/categorias')
     .then(response => response.json())
     .then(json => {
       //Busca el div de navegacion para almacenar las categorias
       const element = document.getElementById('dynamicNav');
       let documentFragment = document.createDocumentFragment();
       //Agrega categorias a contenedor
-      let newBtn = '';
-      for(let i = 0; i < json.categorias.length; i++) {
-            newBtn = btnNav(json.categorias[i]);
+      for(let i = 0; i < json.rows.length; i++) {
+            const newBtn = btnNav(json.rows[i])
             documentFragment.appendChild(newBtn);
-            //customElements.define(`btnNav-${json.categoria[i].name}`, BotonNav);
       }
       //Se inserta contenedor en div dynamicNav
       element.appendChild(documentFragment);
@@ -50,23 +52,19 @@ function handleBuscar(){
   //Validamos que hay texto
   if(name.length > 0){
     const element =  document.getElementById('productosCont');
-    const divPagination = document.getElementById('pagination');
     //Limpia nodos en caso de tener contenido
     element.replaceChildren();
     element.appendChild(loading());
-    divPagination.replaceChildren();
     //Contenedor para productos
     let documentFragment = document.createDocumentFragment();
     //Solicitud de productos según nombre ingresado en input (LIKE)
-    fetch(`http://localhost:3000/productos/${name}`)
+    fetch(`https://simple-store.onrender.com/productos/${name}`)
       .then(response => response.json())
       .then(json => {
-        //console.log(json);
-        if(json.productos.length > 0){
-          const productos = json.productos;
-          let newCard = '';
+        if(json.rows.length > 0){
+          const productos = json.rows;
           for (let i = 0; i < productos.length; i++) {
-            newCard = productCard(productos[i]);
+            const newCard = productCard(productos[i]);
             documentFragment.appendChild(newCard);
           }
         }else {
@@ -75,7 +73,6 @@ function handleBuscar(){
         }
 
       }).catch((e) => {
-        //Si hay conexion //aunque el input de busqueda solo ve cuando
         const noConnResul = document.createElement('div');
         if(e.message === 'Failed to fetch'){
           noConnResul.textContent = 'No hay conexion con la API Sorry';
@@ -93,7 +90,7 @@ function handleBuscar(){
   }
 }
 //Cambia el contenido de productosCont (lista de productos)
-function handleContent(id, name, page){
+function handleContent (id, name, page){
   //Recibe id de categoria y nombre
   //Obtiene el estado actual del div que muestra los productos
   const element =  document.getElementById('productosCont');
@@ -107,18 +104,18 @@ function handleContent(id, name, page){
   const paginationFragment = document.createDocumentFragment();
   const toPage = page ? page : 1
 
+    //console.log('toPage '+toPage)
   //Solicitud de productos según categoria seleccionada
-  fetch(`http://localhost:3000/productosByCategoria?id=${id}&page=${toPage}`)
+  fetch(`https://simple-store.onrender.com/productosByCategoria?id=${id}&page=${toPage}`)
     .then(response => response.json())
     .then(json => {
       //Agregamos elementos a contenedor
       const productos = json.productos;
-      let newCard = ''
       for (let i = 0; i < productos.length; i++) {
-        newCard = productCard(productos[i]);
+        const newCard = productCard(productos[i]);
         documentFragment.appendChild(newCard);
       }
-      //Se inserta paginacion, Math.ceil para redondear al numero superior total productos / 6 (productos por pagina)
+      //Se inserta paginacion, Math.ceil para redondear al numero superior total productos / 6
       for (var i = 0; i < Math.ceil(json.total[0].totalProductos/6); i++) {
         //console.log(i)
         paginationFragment.appendChild(btnPagination(id, name, i));
@@ -131,50 +128,6 @@ function handleContent(id, name, page){
     element.appendChild(documentFragment);
     divPagination.appendChild(paginationFragment);
   }).catch((err) => console.log(err));
-}
-//Cambia el contenido de resumen de compra
-function handleResumen(){
-  //La misma lógica que en updateMiniCardCarrito
-  const element =  document.getElementById('modalBody');
-  element.replaceChildren();
-  let documentFragment = document.createDocumentFragment();
-  const miCarrito = JSON.parse(localStorage.getItem('miCarrito'));
-
-  let a =  document.createElement('a');
-  let nombProd = document.createElement('span')
-  let span =  document.createElement('span');
-  //Agregamos clases de Bootstrap y productosEnCarro para la cantidad y precio
-  //a.classList.add('dropdown-item');
-  nombProd.classList.add('nombreProdCarrito');
-  span.classList.add('precioCantCarrito');  // productosEnCarro
-
-  for (let i = 0; i < miCarrito.length; i++) {
-    //Agregamos contenidos
-    nombProd.textContent = `${miCarrito[i].nombre}`;
-    span.textContent = `${miCarrito[i].cantidad} x ${addDots(miCarrito[i].precio*miCarrito[i].cantidad)}`; //addDots
-    //Unimos elementos
-    a.appendChild(nombProd);
-    a.appendChild(span);
-    documentFragment.appendChild(a);
-  }
-  //console.log(documentFragment)
-    //Inserta contenedor en div productosCont
-    element.appendChild(documentFragment);
-}
-//Limpia los productos comprados
-function handlePagar() {
-  const element =  document.getElementById('modalBody');
-  element.replaceChildren();
-  const documentFragment = document.createDocumentFragment();
-
-  let a =  document.createElement('a');
-  a.textContent = 'Compra realizada con exito!!';
-
-  documentFragment.appendChild(a);
-  element.appendChild(documentFragment);
-  localStorage.setItem('miCarrito', JSON.stringify([]));
-  //updateMiniCardCarrito()
-  location.reload();
 }
 
 //Controles de carrito
@@ -196,8 +149,10 @@ function updateMiniCardCarrito() {
    }
    //Al actualizar puede quedar el carrito sin productos por lo que se debe confirmar
    if(miCarrito.length > 0){
-     //Si hay inserta el/los productos, divider y boton pagar
+     //Si hay inserta el/los productos
     //btnComprar, total
+    //console.log(miCarrito);
+    //console.log(miCarrito.map((p) => parseInt(p.precio)).reduce((a, b) => a + b));
     const total = document.createElement('a');
     total.textContent = `Total : $${addDots(miCarrito.map((p) => parseInt(p.precio)).reduce((a, b) => a + b))}`;
     const btnComprar = document.createElement('button');
@@ -205,10 +160,6 @@ function updateMiniCardCarrito() {
     //Clases de Bootstrap
     btnComprar.classList.add('btn', 'btn-danger', 'btn-sm', 'btnComprar');
     btnComprar.textContent = 'Pagar';
-    btnComprar.setAttribute('data-toggle', 'modal');
-    btnComprar.setAttribute('data-target', '#myModal');
-    btnComprar.onclick = () => handleResumen();
-    //data-toggle="modal" data-target="#myModal"
     total.classList.add('totalCompras');
     divider.classList.add('dropdown-divider');
     documentFragment.appendChild(divider);
@@ -381,38 +332,7 @@ function btnPagination(id, name, page){
   return li;
 }
 
-/////prueba clase
-class BotonNav extends HTMLElement{
-  constructor(id, name) {
-    //super();
-    this.id = id;
-    this.name = name;
-    //const id = 1;
-    //const name = 'testname'
 
-    const shadowRoot = this.attachShadow({mode:'open'});
-    let template = document.getElementById('btnNav');
-    let templateContent = template.content;
-
-    let tag = document.createElement('li');
-    let a = document.createElement('button');
-
-    //Agregamos clases de Bootstrap
-    tag.classList.add('nav-item');
-    a.classList.add('btn', 'btn-light');
-    a.setAttribute('id', id+name);
-    //Asignamos la funcion de cambio de contenido, se entraga id y nombre
-    a.onclick = () => handleContent(`${id}`, `${name}`);
-    //toMayuscula
-    a.textContent = name.toUpperCase();
-    //Unimos elementos
-    templateContent.replaceChildren();
-    tag.appendChild(a);
-    templateContent.appendChild(tag)
-    //element.appendChild(tag);
-    shadowRoot.appendChild(templateContent.cloneNode(true));
-  }
-}
 
 //Otros
 //Panel de notificaciones
@@ -432,8 +352,9 @@ function showNotificacion(msg, tipo){
   myNotificaciones.appendChild(documentFragment);
   myNotificaciones.className = 'show';
   //timeout para volver a esconder
-  setTimeout(() => {myNotificaciones.className = myNotificaciones.className.replace('show', '');}, 2000);
+  setTimeout(() => {myNotificaciones.className = myNotificaciones.className.replace('show', '');}, 3000);
 }
+//Resumen de compra??
 //loading
 function loading(){
   //Retorna icono de carga, handleContent se encarga de llamarlo (o cuando sea necesario)
@@ -451,6 +372,7 @@ function paginate(array, pageSize, pageNumber) {
     return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
   }
 //Agrega punto cada 3 digitos ///creo que tambien se puede con expresiones regulares //probar
+//https://stackoverflow.com/questions/8110313/add-points-after-every-3-digits-on-all-text-fields-with-js
 function addDots(nStr){
     nStr += '';
     x = nStr.split('.');

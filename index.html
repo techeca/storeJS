@@ -61,6 +61,47 @@
       </div>
     </div>
 
+    <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel">Resumen de compra</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id='modalBody' class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="handlePagar()">Pagar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BtnCategoria -->
+<template id="btnNav">
+  <li class="nav-item">
+    <button class="btn btn-light" >BEBIDA ENERGETICA</button>
+  </li>
+</template>
+
+
+<!-- Tarjeta producto -->
+    <template id="my-tarjetaProducto" dataProductos="holstest">
+      <div class="card col-md-3 miCard">
+        <div class="card-header" slot="my-card-header"></div>
+        <img class="card-img-top imagenProducto" src="">
+        <div class="card-body">
+          <p slot="my-card-name" class="card-text"></p>
+        </div>
+        <button class="btn btn-primary btnAgregar" slot="my-button" >Agregar</button>
+      </div>
+    </template>
+
     <nav class="row justify-content-md-center" class="pagination">
       <ul id="pagination" class="pagination">
 
@@ -71,6 +112,7 @@
 
     <!-- Main.js-->
     <script type="text/javascript" src="./js/main.js"></script>
+
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>

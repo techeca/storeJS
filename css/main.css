@@ -64,6 +64,7 @@
 
 .tituloCarrito {
   margin-left: 10px;
+  margin-bottom: 10px;
 }
 
 .totalCompras {
@@ -82,6 +83,13 @@
 
 .row {
     margin-right: 0px;
+    display: flex;
+    justify-content: center;
+}
+
+#modalBody {
+  display: flex;
+  justify-content: center;
 }
 
 /* The snackbar - position it at the bottom and in the middle of the screen */
