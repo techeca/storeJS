@@ -1,11 +1,16 @@
 # API
-<<<<<<< HEAD
 API realizada con Express, acepta 3 solicitudes: categorias, productos por nombre y productos por categoria.
 
-[API](https://github.com/techeca/storeJS/tree/API)
+[Branch-API](https://github.com/techeca/storeJS/tree/API)
 ```bash
 git clone -b API https://github.com/techeca/storeJS.git
 ````
+
+### DEMO
+
+[API](https://simple-store.onrender.com)
+
+API realizada con ExpressJS.
 
 ## Detalles
 
@@ -71,10 +76,3 @@ Productos por categorio.
       "category": 7
     }
 ```
-
-## DEMO
-
-[API](https://simple-store.onrender.com)
-=======
-
-API realizada con ExpressJS.
