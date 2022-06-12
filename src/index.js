@@ -12,6 +12,10 @@ app.use(morgan('dev')); //ejecuta morgan solo en development
 //app.use(express.json());  //Necesario para POST/PUT
 app.use(cors());
 app.use(require('./routes/index')); //Rutas de request
+app.use(function(err, req, res, next){
+  console.log(err.stack);
+  res.status(err.status || 500).send(err);
+})
 
 //Inicia servidor
 app.listen(app.get('port'), () => {
