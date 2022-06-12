@@ -7,23 +7,6 @@ API realizada con Express, acepta 3 solicitudes: categorias, productos por nombr
 git clone -b API https://github.com/techeca/storeJS.git
 ````
 
-## Endpoints
-Entrega todas las categorias.
-> /categorias
-
-Entrega todos los productos que contengan la palabra buscada.
-> /productos/flor
-
-Entrega los productos según la id de categoria
-> /productoByCategoria/1
-
-## DEMO
-
-[API](https://simple-store.onrender.com)
-=======
-
-API realizada con ExpressJS.
-
 ## Detalles
 
 En `config/db.js` se encuentra la configuración para la base de datos, debe tener `.env` creado para pruebas locales.
@@ -88,4 +71,10 @@ Productos por categorio.
       "category": 7
     }
 ```
->>>>>>> 97b9e580892f41839a8f6734d42b309e0a36d167
+
+## DEMO
+
+[API](https://simple-store.onrender.com)
+=======
+
+API realizada con ExpressJS.
