@@ -22,22 +22,22 @@ git clone -b Frontend https://github.com/techeca/storeJS.git
 
 ## Funciones
 
-#### firstload()\
+#### firstload()
 Se encarga de la primera carga de la web, llama a loadNav() y si hay objetos guardados en localStorage llama a updateMiniCardCarrito().
 
-#### loadNav()\
+#### loadNav()
 Realiza un fetch para obtener las categorías y crear los elementos a insertar.
 
-#### handleBuscar()\
+#### handleBuscar()
 Busca los productos solicitados y los entrega en el contenido de la web.
 
-#### handleContent()\
+#### handleContent()
 Cambia el contenido de la página dependiendo de la sección seleccionada.
 
-#### handleResumen()\
+#### handleResumen()
 Cambia el contenido del resument de compra.
 
-#### handlePagar()\
+#### handlePagar()
 Limpiar los productos de localStorage.
 
 #### updateMiniCardCarrito()
