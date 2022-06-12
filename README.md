@@ -1,11 +1,18 @@
 # storeJS
 Frontend y Backend simple con consumo de API.\
-Los proyectos estan separados por branch.\
-[FRONTEND](https://github.com/techeca/storeJS/tree/Frontend)\
+Los proyectos estan separados por branch.
+
+[FRONTEND](https://github.com/techeca/storeJS/tree/Frontend)
+```bash
+git clone -b Frontend https://github.com/techeca/storeJS.git
+``` 
 [API](https://github.com/techeca/storeJS/tree/API)
+```bash
+git clone -b API https://github.com/techeca/storeJS.git
+````
 
 ## Frontend
-Landing page realizada con JavaScript, los único externo que utiliza es Bootstrap y FontAwesome para el diseño.
+Landing page realizada con JavaScript, utiliza Bootstrap y FontAwesome para el diseño.
 
 ## API
 API realizada con Express, acepta 3 solicitudes: categorias, productos por nombre y productos por categoria.
