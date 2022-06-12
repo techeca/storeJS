@@ -13,10 +13,10 @@ router.get('/categorias', (req, res) => {
   //if(isNaN(req.params) & !isNaN(req.params)){console.log('true?')};
       //if(req.params) throw 'No debe entragar parametros en categorias';
       pool.query('SELECT * FROM category', (err, rows, fields) => {
-      if(err) throw console.log('error en query '+err);
+      if(err) err;
        const categorias = rows;
        res.json({categorias});
-    }).catch((e) => console.log('error de query '+e));
+    });
     pool.releaseConnection(pool);
 });
 
