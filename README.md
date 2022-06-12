@@ -6,10 +6,13 @@ Web realizada con Javascript, Bootstrap, FontAwesome (y JQuery por el mismo Boot
 
 Este proyecto está en la branch `/Frontend`.
 
-[FRONTEND](https://github.com/techeca/storeJS/tree/Frontend)
+[Branch-Frontend](https://github.com/techeca/storeJS/tree/Frontend)
 ```bash
 git clone -b Frontend https://github.com/techeca/storeJS.git
 ```
+
+### DEMO
+[Frontend](https://frontend-tn1v.onrender.com)
 
 ## Estructura
 ```bash
@@ -49,7 +52,7 @@ Agrega producto seleccionado.
 #### quitarProductoCarrito()
 Descuenta -1 al producto seleccionado.
 
-Retorna*, Se refiere a que genera y entrega un documentFragment
+Retorna*, Se refiere a que genera y entrega un documentFragment.
 
 #### btnNav()
 Retorna cuerpo de botón de categoría(nombre).
@@ -68,6 +71,3 @@ Muestra panel de notificación por 3 seg.
 
 #### loading()
 Retorna div con icono de carga (utilizado en handleContent()).
-
-## DEMO
-[Frontend](https://frontend-tn1v.onrender.com)
