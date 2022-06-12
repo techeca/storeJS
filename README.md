@@ -1,60 +1,72 @@
 # Frontend
 
-Web realizada con Javascripy y Bootstrap (y JQuery por el mismo Bootstrap).\
+Web realizada con Javascript, Bootstrap, FontAwesome (y JQuery por el mismo Bootstrap).
+
+### Instalación
+
+Este proyecto está en la branch `/Frontend`.
+
+[FRONTEND](https://github.com/techeca/storeJS/tree/Frontend)
+```bash
+git clone -b Frontend https://github.com/techeca/storeJS.git
+```
 
 ## Estructura
-
-/assets (FontAwesome)
-/css
-/js
-  /main.js
-/index.html
+```bash
+/assets (FontAwesome)\
+/css\
+/js\
+  /main.js\
+/index.html\
+```
 
 ## Funciones
 
-firstload()
+#### firstload()\
 Se encarga de la primera carga de la web, llama a loadNav() y si hay objetos guardados en localStorage llama a updateMiniCardCarrito().
 
-loadNav()
+#### loadNav()\
 Realiza un fetch para obtener las categorías y crear los elementos a insertar.
 
-handleBuscar()
+#### handleBuscar()\
 Busca los productos solicitados y los entrega en el contenido de la web.
 
-handleContent()
+#### handleContent()\
 Cambia el contenido de la página dependiendo de la sección seleccionada.
 
-handleResumen()
+#### handleResumen()\
 Cambia el contenido del resument de compra.
 
-handlePagar()
+#### handlePagar()\
 Limpiar los productos de localStorage.
 
-updateMiniCardCarrito()
+#### updateMiniCardCarrito()
 Actualiza carrito de comprar(carrito no resumen).
 
-agregarProductoCarrito()
+#### agregarProductoCarrito()
 Agrega producto seleccionado.
 
-quitarProductoCarrito()
+#### quitarProductoCarrito()
 Descuenta -1 al producto seleccionado.
 
-btnNav()
+Retorna*, Se refiere a que genera y entrega un documentFragment
+
+#### btnNav()
 Retorna cuerpo de botón de categoría(nombre).
 
-productCard()
+#### productCard()
 Retorna cuerpo de tarjeta de detalle producto (nombre, imagen,precio).
 
-productCarrito()
+#### productCarrito()
 Retorna cuerpo de producto en carrito (nombre, cantidad, precio total).
 
-btnPagination()
+#### btnPagination()
 Retorna los botones para paginación(retorna los botones necesarios.)
 
-showNotificacion()
+#### showNotificacion()
 Muestra panel de notificación por 3 seg.
 
-loading()
+#### loading()
 Retorna div con icono de carga (utilizado en handleContent()).
 
 ## DEMO
