@@ -12,7 +12,7 @@ function firstLoad(){
 //Carga categorias a NAV
 function loadNav(){
   //Solicitud de categorias // se ejecuta en onload
-  fetch('https://simple-store.onrender.com/categorias')
+  fetch('http://localhost:3000/categorias')
     .then(response => response.json())
     .then(json => {
       //Busca el div de navegacion para almacenar las categorias
@@ -58,7 +58,7 @@ function handleBuscar(){
     //Contenedor para productos
     let documentFragment = document.createDocumentFragment();
     //Solicitud de productos según nombre ingresado en input (LIKE)
-    fetch(`https://simple-store.onrender.com/productos/${name}`)
+    fetch(`http://localhost:3000/productos/${name}`)
       .then(response => response.json())
       .then(json => {
         //console.log(json);
@@ -108,7 +108,7 @@ function handleContent(id, name, page){
   const toPage = page ? page : 1
 
   //Solicitud de productos según categoria seleccionada
-  fetch(`https://simple-store.onrender.com/productosByCategoria?id=${id}&page=${toPage}`)
+  fetch(`http://localhost:3000/productosByCategoria?id=${id}&page=${toPage}`)
     .then(response => response.json())
     .then(json => {
       //Agregamos elementos a contenedor
