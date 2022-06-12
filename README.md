@@ -1,4 +1,4 @@
-# storeJS
+# SimpleStore
 Frontend y Backend simple con consumo de API.\
 Los proyectos estan separados por branch.
 
