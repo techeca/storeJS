@@ -18,6 +18,7 @@ git clone -b Frontend https://github.com/techeca/storeJS.git
 ```bash
 /assets (FontAwesome)\
 /css\
+  /main.css\
 /js\
   /main.js\
 /index.html\
