@@ -11,7 +11,7 @@ const config = {
   connectionLimit: 10,
   queueLimit: 0
 };
-//Check de conexión //BORRAR
+//Check de conexión
  const pool = mysql.createConnection(config);
  pool.connect((err) => {
    if(err){

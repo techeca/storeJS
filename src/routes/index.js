@@ -5,7 +5,7 @@ const router = Router();
 
 //Nada
 router.get('/', (req, res) => {
-      res.json('Las rutas admitidas son /categorias /productos/:name /productosByCategoria?id=nID&page=nPage');
+      res.json('API ON');
 });
 
 //Obtiene todas la categorias
