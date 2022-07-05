@@ -28,7 +28,7 @@ if(await checkConexion() === 'API ON'){
 async function checkConexion(){
   //Realiza un fetch, la respuesta deberia ser API ON en caso
   //de existir conexion con la API, la respuesta se pasa a json
-  let response = await fetch('http://localhost:3000');
+  let response = await fetch('https://simple-store.onrender.com');
   let status = await response.json();
 
   return status;
