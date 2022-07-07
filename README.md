@@ -1,16 +1,63 @@
 # SimpleStore
 Frontend y Backend simple con consumo de API.
 
-Los proyectos estan separados por branch.
+## Instalación Frontend
+Desde la carpeta de su preferencia (limpia) ejecute el siguiente comando:
 
 [FRONTEND](https://github.com/techeca/storeJS/tree/Frontend)
 ```bash
-git clone -b Frontend https://github.com/techeca/storeJS.git
+git clone -b Frontend https://github.com/techeca/storeJS.git Frontend
 ``` 
+
+Ingrese al repositorio descargado:
+```bash
+cd Frontend
+```
+
+Instale depencias:
+```bash
+npm i
+```
+
+Para realizar pruebas:
+```bash
+npm run serve
+```
+
+Para build:
+```bash
+npm build:dev
+```
+
+Al realizar build, se genera la web en la carpeta `dist`
+
+## Instalación API
+Desde la carpeta de su preferenia (limpia) ejecute el siguiente comando:
+
 [API](https://github.com/techeca/storeJS/tree/API)
 ```bash
-git clone -b API https://github.com/techeca/storeJS.git
+git clone -b API https://github.com/techeca/storeJS.git API
 ````
+
+Ingrese al repositorio descargado:
+```bash
+cd API
+```
+
+Instale depencias:
+```bash
+npm i
+```
+
+Para realizar pruebas:
+```bash
+npm run dev
+```
+
+Para build:
+```bash
+npm run prod
+```
 
 ## Frontend
 Landing page realizada con JavaScript, utiliza Bootstrap y FontAwesome para el diseño.
