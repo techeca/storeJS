@@ -10,8 +10,8 @@
   object-fit: contain;
 }
 
-.btnCarShop {
-  margin-left: 10px;
+#formBusqueda {
+  margin-right: 10px;
 }
 
 .miniCardCarrito {
@@ -115,6 +115,20 @@
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
+#root
+ {
+   position: fixed;
+   left: 0px;
+   right: 0px;
+   top: 0px;
+   bottom: 0px;
+   background-color: white;
+   z-index: 99; /* Higher than anything else in the document */
+   display: flex;
+   justify-content: center;
+   padding-top: 10%;
+ }
+
 /* Animations to fade the snackbar in and out */
 @-webkit-keyframes fadein {
   from {bottom: 0; opacity: 0;}
@@ -135,15 +149,3 @@
   from {bottom: 30px; opacity: 1;}
   to {bottom: 0; opacity: 0;}
 }
-
-#hideAll
- {
-   position: fixed;
-   left: 0px;
-   right: 0px;
-   top: 0px;
-   bottom: 0px;
-   background-color: white;
-   z-index: 99; /* Higher than anything else in the document */
-
- }

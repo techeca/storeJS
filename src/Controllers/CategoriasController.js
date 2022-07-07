@@ -8,7 +8,7 @@ export default class CategoriasController {
     this.view.cambiarPagina(this.cambiarPagina);
     this.view.buscarProducto(this.buscarPorNombre);
 
-    //Se obtienen los datos desde modelo
+    //Se obtienen las categorías desde modelo
     this.onCategoriasChanged(this.model.categorias);
   }
 
@@ -17,7 +17,11 @@ export default class CategoriasController {
   }
 
   onProductosChanged = productos => {
-    this.view.insertarProductosEnContainer(productos)
+    if(productos.productos.length > 0){
+      this.view.insertarProductosEnContainer(productos);
+    }else {
+      this.view.mensajeEnProductContent('No tenemos ese Producto :(');
+    }
   }
 
   cambiarCategoria = (id) => {
@@ -29,8 +33,11 @@ export default class CategoriasController {
   }
 
   buscarPorNombre = (name) => {
-    console.log('controller buscarNombre')
-    this.model.obtenerProductosPorNombre(name);
+    if(name.length > 0){
+      this.model.obtenerProductosPorNombre(name);
+    }else {
+      this.view.mensajeEnProductContent('Debes ingresar un texto para poder buscar :/')
+    }
   }
 
 }

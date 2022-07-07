@@ -7,29 +7,26 @@ import CategoriasController from './Controllers/CategoriasController.js'
 import CategoriasModel from './Models/CategoriasModel.js'
 import CategoriasView from './Views/CategoriasView.js'
 
-//const test = new CategoriasController(new CategoriasModel(), new CategoriasView())
-
+//La API genera un mensaje personalizado el cual verificamos para saber si la API esta funcionando
+//Mensaje: "API ON"
 if(await checkConexion() === 'API ON'){
   console.log('Hay conexión con la API, generamos categorias.')
-  //Si hay conexion instanciamos las clases de Categorias y Carrito
-  //Genera un boton más su respectiva funcion (cambiar contenido) por cada categoria
-  const categorias = new CategoriasController(new CategoriasModel(), new CategoriasView())
-  //Cargamos boton de carrito y contenido de carrito si es que existe
-
-  //Luego se carga el contenido de la página, al cargar no hay ninguna categoria
-  //seleccionada por lo que se define un contenido en blanco
-
-}else {
-  //console.log('segunda verificacion false')
-  ///console.log(checkConexion())
-  console.log('No hay conxión con la API');
+  //Si hay conexion instanciamos la clase de Categorias
+  const categorias = new CategoriasController(new CategoriasModel(), new CategoriasView());
+  }else {
+  console.log('No hay conexión con la API');
 }
 
 async function checkConexion(){
-  //Realiza un fetch, la respuesta deberia ser API ON en caso
-  //de existir conexion con la API, la respuesta se pasa a json
-  let response = await fetch('https://simple-store.onrender.com');
-  let status = await response.json();
-
+  let status;
+  //Realiza un fetch, la respuesta es API ON en caso de existir conexion con la API //igual a response.ok
+  console.log('Verificando de conexión...');
+  try {
+    let response = await fetch('https://simple-store.onrender.com/');
+    status = await response.json();
+  } catch (e) {
+    console.log(e.message);
+  }
+  //console.log(status)
   return status;
 }

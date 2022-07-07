@@ -1,39 +1,45 @@
 export default class CategoriasView {
   constructor() {
-    //Navegación y contenedor de productos
+    this.paginaSeleccionada = '';
+    //divs root, Navegación, Productos, Paginación
+    this.divRoot = document.getElementById('root');
     this.categoriasContainer = document.getElementById('dynamicNav');
-    this.categoriaFragment = document.createDocumentFragment();
     this.productosContainer =  document.getElementById('productosCont');
     this.divPaginacion = document.getElementById('pagination');
-    this.documentFragment = document.createDocumentFragment();
-    this.paginationFragment = document.createDocumentFragment();
-    this.paginaSeleccionada = '';
+    //Form para busqueda
     this.formBusqueda = document.getElementById('formBusqueda');
     this.inputBuscar = document.getElementById('inputBusqueda');
     this.btnBuscar = document.getElementById('btnBuscar');
   }
 
+  //Devuelve el contenido del input de busqueda de producto
   get busquedaText(){
     return this.inputBuscar.value;
   }
 
-  //Carga las categorias en la navegacion (dynamicNav)
+  //Carga las categorías en la navegación (dynamicNav)
   async mostrarCategorias(categorias) {
-      //Guardamos la información recibida y generamos un boton en el fragmento
-      //por cada categoria, luego el fragmento lo agregamos al dynamicNav
-      //dynamicNav está conectado al DOM
-      let result = await categorias;
-      let newBtn = '';
-      for (var i = 0; i < result.categorias.length; i++) {
-           //console.log(result.categorias[i].name)
-           newBtn =  this.generarBotonNav(result.categorias[i]);
-           this.categoriaFragment.append(newBtn);
+      //Guardamos la información recibida y genera un botón en el fragmento por cada categoría
+      const categoriaFragment = document.createDocumentFragment();
+      this.divRoot.appendChild(this.loading());
+      try {
+        let result = await categorias;
+        let newBtn = '';
+        for (var i = 0; i < result.categorias.length; i++) {
+             newBtn =  this.generarBotonNav(result.categorias[i]);
+             categoriaFragment.append(newBtn);
+        }
+        this.categoriasContainer.appendChild(categoriaFragment);
+        this.divRoot.style.display = 'none';
+      } catch (e) {
+        console.log(e);
       }
-      this.categoriasContainer.appendChild(this.categoriaFragment);
   }
 
-  //Función para mostrar productos
+  //Lista los productos
   async insertarProductosEnContainer(data){
+    const productosFragment = document.createDocumentFragment();
+    const paginationFragment = document.createDocumentFragment();
     let result = await data.productos ? data.productos : [];
     let paginas = await data.total ? data.total : [0];
     let newProducto = '';
@@ -41,41 +47,43 @@ export default class CategoriasView {
     if(!result || result.length > 0){
       for (var i = 0; i < result.length; i++) {
            newProducto =  this.generarTarjetaProducto(result[i]);
-           this.documentFragment.append(newProducto);
+           productosFragment.append(newProducto);
       }
-      //Se inserta paginacion, Math.ceil para redondear al numero superior total productos / 6
+      //Se inserta paginación, Math.ceil para redondear al número superior
       for (var i = 0; i < Math.ceil(paginas[0].totalProductos/6); i++) {
-        this.paginationFragment.append(this.generarBotonPaginacion(i));
+        paginationFragment.append(this.generarBotonPaginacion(i));
       }
       this.limpiarContainerProductos();
-      this.productosContainer.appendChild(this.documentFragment);
-      this.divPaginacion.appendChild(this.paginationFragment);
+      this.productosContainer.appendChild(productosFragment);
+      this.divPaginacion.appendChild(paginationFragment);
      }
     }
 
-  //Cambia la categoria seleccionada
+  //Cambia la categoría actual (no confundir con cambiar página)
   cambiarCategoria(handler){
-    //cambiarCategoria recibe cambiarPagina en controller, este le entrega id y page al
-    //model, si no hay page se settea a 1 (para recibir la página número 1)
       this.categoriasContainer.addEventListener('click', event => {
         this.paginaSeleccionada = event.target.id;
+        this.limpiarContainerProductos();
+        this.productosContainer.appendChild(this.loading());
         handler(event.target.id)
       })
   }
 
-  //Cambia la pagina actual de productos (no confundir con el cambio de categoria)
+  //Cambia la página actual de productos (no confundir con cambiar categoría)
   cambiarPagina(handler){
     this.divPaginacion.addEventListener('click', event => {
+      this.limpiarContainerProductos();
+      this.productosContainer.appendChild(this.loading());
       handler(this.paginaSeleccionada, event.target.textContent)
     })
   }
 
-
-  //Busca proudctos por nombre
+  //Busca productos por nombre
   buscarProducto(handler){
     this.formBusqueda.addEventListener('submit', event => {
+      this.limpiarContainerProductos();
+      this.productosContainer.appendChild(this.loading());
       event.preventDefault();
-      //console.log(this.busquedaText)
       handler(this.busquedaText);
       this.inputBuscar.value = '';
     })
@@ -83,13 +91,11 @@ export default class CategoriasView {
 
   //Limpia contenido actual de dynamicNav
   limpiarContainerProductos(){
-        this.productosContainer.replaceChildren();
-        this.divPaginacion.replaceChildren();
+      this.productosContainer.replaceChildren();
+      this.divPaginacion.replaceChildren();
   }
 
-  //DISEÑO
-  //podria cambiarse por componentes y element
-  //Diseño de boton para Categorias (nav)
+  //Boton para Categorias (nav)
   generarBotonNav(data) {
       const newCategoria = data;
       let tag = document.createElement('li');
@@ -98,18 +104,16 @@ export default class CategoriasView {
       tag.classList.add('nav-item');
       a.classList.add('btn', 'btn-light');
       a.setAttribute('id', newCategoria.id);
-      //Asignamos la funcion de cambio de contenido, se entraga id y nombre
-      //a.onclick = () => this.cambiarCategoria(`${newCategoria.id}`, `${newCategoria.name}`);
-      //toMayuscula
+      //Contenido a mayúsculas
       a.textContent = newCategoria.name.toUpperCase();
       //Unimos elementos
       tag.appendChild(a);
 
       return tag;
   }
-  //Diseño tarjeta de producto
+  //Tarjeta de producto
   generarTarjetaProducto(dataProducto){
-    const nuevoProducto = dataProducto;
+      const nuevoProducto = dataProducto;
       const noImgUrl = 'https://medicaercanarias.com/wp-content/uploads/2019/09/x.jpg'
 
       let header = document.createElement('div');
@@ -120,7 +124,7 @@ export default class CategoriasView {
       let precioProducto = document.createElement('p');
       let botonComprar = document.createElement('button');
 
-      //Se agrega clases de Bootstrap y main.css para ajustar imagen y orden de objetos
+      //Se agrega clases de Bootstrap y css en general
       header.classList.add('card-header');
       img.classList.add('card-img-top', 'imagenProducto');
       card.classList.add('card', 'col-md-3','miCard');
@@ -131,7 +135,6 @@ export default class CategoriasView {
       //Si tiene imagen devuelve el link, si no hay imagen utiliza la imagen de respaldo 'noImgUrl'
       img.setAttribute('src' ,`${nuevoProducto.url_image ? nuevoProducto.url_image : noImgUrl}`);
       card.setAttribute('id', nuevoProducto.id);
-      //botonComprar.onclick = () => agregarProductoCarrito(`${tempData.name}`, `${tempData.price}`);
       //Datos de producto
       header.textContent = nuevoProducto.name;
       precioProducto.textContent = `Precio: $${this.addDots(nuevoProducto.price)}`;
@@ -144,18 +147,42 @@ export default class CategoriasView {
       card.appendChild(botonComprar);
       return card;
   }
-  //Diseño boton de paginación
+  //boton de paginación
   generarBotonPaginacion(page){
     let li = document.createElement('li');
     let a = document.createElement('a');
     li.classList.add('padge-item');
     a.classList.add('page-link');
+    //Para no comenzar desde 0, +1
     a.textContent = `${page+1}`;
-    //a.onclick = () => handleContent(id, name, page+1);
     li.appendChild(a);
-  return li;
+    return li;
   }
 
+  //loading
+  loading(){
+    //Retorna icono de carga
+    let documentFragment = document.createDocumentFragment();
+    let loadIcon = document.createElement('i');
+    //Clases de FontAwesome para hacer girar y aumentar tamaño
+    loadIcon.classList.add('fa-solid', 'fa-spinner', 'fa-spin-pulse', 'fa-4x', 'loading')
+    documentFragment.appendChild(loadIcon);
+    //this.productosContainer.appendChild(documentFragment);
+    return documentFragment;
+  }
+
+  //Muestra mensaje en el container de productos
+  mensajeEnProductContent(mensaje){
+    this.limpiarContainerProductos();
+    let documentFragment = document.createDocumentFragment();
+    const noConnResul = document.createElement('div');
+    noConnResul.textContent = mensaje;
+    documentFragment.appendChild(noConnResul);
+
+    this.productosContainer.appendChild(documentFragment);
+  }
+
+  //utils, solo lo utiliza  tarjeta de productos, por el momento, tambien deberia usarlo carrito
   //Agrega puntos a precios
   addDots(nStr){
       nStr += '';

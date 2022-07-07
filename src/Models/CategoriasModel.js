@@ -1,7 +1,12 @@
 export default class CategoriasModel {
-  constructor() {
+  constructor(url) {
     this.categorias = this.solicitudCategorias() || [];
     this.productos = [];
+  }
+
+  getUrlApi(solicitud){
+    let url = `https://simple-store.onrender.com/${solicitud}`
+    return url;
   }
 
   verCategorias(callback) {
@@ -14,26 +19,21 @@ export default class CategoriasModel {
 
 async solicitudCategorias() {
     //prod https://simple-store.onrender.com/
-    //Solicitud de categorias y se pasan a json
-    let response = await fetch(`https://simple-store.onrender.com/categorias`);
+    let response = await fetch(this.getUrlApi('categorias'));
     let categorias = await response.json();
-
     return categorias;
   }
 
 async obtenerProductosPorCategoria(id, page) {
       const toPage = page ? page : 1
-
-      let response = await fetch(`https://simple-store.onrender.com/productosByCategoria?id=${id}&page=${toPage}`);
+      let response = await fetch(`${this.getUrlApi('productosByCategoria')}?id=${id}&page=${toPage}`);
       let data = await response.json();
-      //console.log(data)
-      //return data;
       this.onProductosChanged(data);
       return data;
   }
 
 async obtenerProductosPorNombre(name) {
-    let response = await fetch(`https://simple-store.onrender.com/productos/${name}`);
+    let response = await fetch(`${this.getUrlApi('productos')}/${name}`);
     let data = await response.json();
     this.onProductosChanged(data);
     return data;
