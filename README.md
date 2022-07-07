@@ -2,9 +2,7 @@
 Frontend y Backend simple con consumo de API.
 
 ## Instalación Frontend
-Desde la carpeta de su preferencia (limpia) ejecute el siguiente comando:
-
-[FRONTEND](https://github.com/techeca/storeJS/tree/Frontend)
+Desde la carpeta de su preferencia ejecute el siguiente comando:
 ```bash
 git clone -b Frontend https://github.com/techeca/storeJS.git Frontend
 ``` 
@@ -29,12 +27,10 @@ Para build:
 npm build:dev
 ```
 
-Al realizar build, se genera la web en la carpeta `dist`
+Al realizar build, se genera la web en la carpeta `/dist`
 
 ## Instalación API
-Desde la carpeta de su preferenia (limpia) ejecute el siguiente comando:
-
-[API](https://github.com/techeca/storeJS/tree/API)
+Desde la carpeta de su preferenia ejecute el siguiente comando:
 ```bash
 git clone -b API https://github.com/techeca/storeJS.git API
 ````
@@ -59,19 +55,11 @@ Para build:
 npm run prod
 ```
 
-## Frontend
-Landing page realizada con JavaScript, utiliza Bootstrap y FontAwesome para el diseño.
-
-## API
-API realizada con Express, acepta 3 solicitudes: categorias, productos por nombre y productos por categoria.
-
 # Demos
-
 Fue utilizado [Render](https://render.com) para alojar Frontend y API. 
 
 [Front](https://frontend-tn1v.onrender.com)
-
-[API](https://simple-store.onrender.com)
+[API](https://api-g2zy.onrender.com)
 
 # Img
 
