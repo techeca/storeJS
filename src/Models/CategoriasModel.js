@@ -5,7 +5,7 @@ export default class CategoriasModel {
   }
 
   getUrlApi(solicitud){
-    let url = `https://simple-store.onrender.com/${solicitud}`
+    let url = `https://api-g2zy.onrender.com/${solicitud}`
     return url;
   }
 

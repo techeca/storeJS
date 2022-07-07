@@ -22,7 +22,7 @@ async function checkConexion(){
   //Realiza un fetch, la respuesta es API ON en caso de existir conexion con la API //igual a response.ok
   console.log('Verificando de conexión...');
   try {
-    let response = await fetch('https://simple-store.onrender.com/');
+    let response = await fetch('https://api-g2zy.onrender.com/');
     status = await response.json();
   } catch (e) {
     console.log(e.message);
