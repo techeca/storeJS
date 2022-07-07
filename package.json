@@ -35,6 +35,6 @@
     "lodash": "^4.17.21"
   },
   "version": "1.0.0",
-  "description": "Simple Store",
-  "name": "Simple Store - Frontend"
+  "description": "My webpack project",
+  "name": "my-webpack-project"
 }
